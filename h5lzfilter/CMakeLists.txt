@@ -1,0 +1,9 @@
+file(GLOB H5LZ_FILTER_LIB_SOURCES *.c)
+include_directories(${LZ4_SRC_DIR} ${HDF5_INCLUDE_DIRS})
+
+set(CMAKE_C_STANDARD 99)
+
+add_library(h5lzfilter SHARED ${H5LZ_FILTER_LIB_SOURCES})
+target_link_libraries(h5lzfilter lz4)
+
+install(TARGETS h5lzfilter DESTINATION lib)
