@@ -1,0 +1,36 @@
+language: c
+
+env:
+  global:
+    - INSTALL_PREFIX=$TRAVIS_BUILD_DIR/install
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+      compiler: gcc
+      addons:
+        apt:
+          packages: ['libhdf5-dev']
+
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      before_install:
+        - brew update || brew update
+        - brew list
+        - brew install homebrew/science/hdf5
+        - brew outdated cmake || brew upgrade cmake
+
+install:
+- mkdir -p build
+- mkdir -p $INSTALL_PREFIX
+- pushd build
+- cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX ..
+- make VERBOSE=1
+- make install
+- popd
+
+script:
+- ls -l $INSTALL_PREFIX/*
