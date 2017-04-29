@@ -12,5 +12,5 @@ set(CMAKE_C_STANDARD 99)
 add_library(h5bshuf SHARED ${BITHSUFFLE_LIB_SOURCES})
 target_link_libraries(h5bshuf lz4 ${HDF5_LIBRARIES})
 
-install(TARGETS h5bshuf DESTINATION lib)
+install(TARGETS h5bshuf DESTINATION h5plugin)
 install(FILES ${BITHSUFFLE_PUBLIC_HEADERS} DESTINATION include)
