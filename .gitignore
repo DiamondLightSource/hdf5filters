@@ -1,3 +1,7 @@
+.idea/
+.project/
+.cproject/
+
 # Object files
 *.o
 *.ko
