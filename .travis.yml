@@ -24,9 +24,9 @@ matrix:
         - brew outdated cmake || brew upgrade cmake
 
 install:
-- mkdir -p build
+- mkdir -p cmake-build
 - mkdir -p $INSTALL_PREFIX
-- pushd build
+- pushd cmake-build
 - cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release ..
 - make VERBOSE=1
 - make install
