@@ -1,0 +1,19 @@
+PROGRAM=hdf5filters
+VERSION=0.1.0
+TAR_FILE=none
+
+build()
+{
+    # Add dependencies to the path, just in case the build system
+    # attempts to run binaries like compilers etc from the environment.
+    export PATH=$CMAKE_BIN:$HDF5_BIN:$PATH
+    
+    #SRC=$PWD/..
+    #pushd $SRC
+	cmake -DHDF5_ROOT=$HDF5_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX -DCMAKE_BUILD_TYPE=Release ..
+	make VERBOSE=1
+	make install
+    #popd 
+}
+
+# vim: set filetype=sh:

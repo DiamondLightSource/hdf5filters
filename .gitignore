@@ -1,6 +1,12 @@
 .idea/
 .project/
 .cproject/
+cmake-build/
+
+# DLS build system
+*.log
+*.sta
+prefix/
 
 # Object files
 *.o
