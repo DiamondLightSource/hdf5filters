@@ -67,6 +67,7 @@ mkdir -p cmake-build
 cd cmake-build
 cmake -DHDF5_ROOT=/path/to/hdf5/installation/ \
       -DCMAKE_INSTALL_PREFIX=/path/to/install/destination \
+      -DCMAKE_BUILD_TYPE=Release \
       ..
 make
 make install
