@@ -59,7 +59,7 @@ Build and install
 Requirements: HDF5 C library and headers version >= 1.8.11
 
 Recommendation: build on/for a processor with Intel AVX2 support for best 
-performance.
+performance. Setting the CMAKE_BUILD_TYPE=Release will enable optimizations.
 
 ```
 cd hdf5filters
