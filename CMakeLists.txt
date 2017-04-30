@@ -47,7 +47,7 @@ IF("${isSystemDir}" STREQUAL "-1")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 #======================================================
 
-
+set(CMAKE_C_FLAGS_RELEASE "-O3 -msse2 -mavx")
 set(LZ4_SRC_DIR ${hdf5filters_SOURCE_DIR}/lz4)
 add_subdirectory(lz4)
 add_subdirectory(h5lzfilter)
