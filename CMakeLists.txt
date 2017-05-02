@@ -52,3 +52,7 @@ set(LZ4_SRC_DIR ${hdf5filters_SOURCE_DIR}/lz4)
 add_subdirectory(lz4)
 add_subdirectory(h5lzfilter)
 add_subdirectory(bitshuffle)
+
+add_executable(demo demo.c)
+target_link_libraries(demo ${HDF5_LIBRARIES})
+include_directories(${HDF5_INCLUDE_DIRS})
