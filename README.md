@@ -61,7 +61,13 @@ Build and install
 Requirements: HDF5 C library and headers version >= 1.8.11
 
 Recommendation: build on/for a processor with Intel AVX2 support for best 
-performance. Setting the CMAKE_BUILD_TYPE=Release will enable optimizations.
+performance. The following flags can be used to control what optimisations are 
+enabled:
+
+* CMAKE_BUILD_TYPE=Release will enable compiler optimizations: -O3
+* CMAKE_BUILD_TYPE=RelWithDebInfo will enable compiler optimizations: -O2
+* USE_SSE2=ON will enable SSE2 extensions: -msse2 (default: ON)
+* USE_AVX2=ON will enable AVX2 extensions: -mavx2 (default: OFF - use gcc >= 4.8)
 
 ```
 cd hdf5filters
@@ -69,7 +75,8 @@ mkdir -p cmake-build
 cd cmake-build
 cmake -DHDF5_ROOT=/path/to/hdf5/installation/ \
       -DCMAKE_INSTALL_PREFIX=/path/to/install/destination \
-      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_BUILD_TYPE=Release \ 
+      -DUSE_AVX2=ON \
       ..
 make
 make install
