@@ -27,7 +27,7 @@ install:
 - mkdir -p cmake-build
 - mkdir -p $INSTALL_PREFIX
 - pushd cmake-build
-- cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release ..
+- cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX -DCMAKE_BUILD_TYPE=Release -DUSE_AVX2=ON ..
 - make VERBOSE=1
 - make install
 - popd

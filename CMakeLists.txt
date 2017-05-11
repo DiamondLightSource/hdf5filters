@@ -47,7 +47,23 @@ IF("${isSystemDir}" STREQUAL "-1")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 #======================================================
 
-set(CMAKE_C_FLAGS_RELEASE "-O3 -msse2 -mavx")
+option(USE_AVX2 "Use the AVX2 optimisations with the -mavx2 compiler flag" OFF)
+option(USE_SSE2 "Use the SSE2 optimisations with the -msse2 compiler flag" ON)
+
+set(CFLAGS_OPT "")
+if (USE_AVX2)
+    set(CFLAGS_OPT "${CFLAGS_OPT} -mavx2")
+endif(USE_AVX2)
+if (USE_SSE2)
+    set(CFLAGS_OPT "${CFLAGS_OPT} -msse2")
+endif(USE_SSE2)
+
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${CFLAGS_OPT}")
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} ${CFLAGS_OPT}")
+
+message("-- Using SSE2 flags: ${USE_SSE2}")
+message("-- Using AVX2 flags: ${USE_AVX2}")
+
 set(LZ4_SRC_DIR ${hdf5filters_SOURCE_DIR}/lz4)
 add_subdirectory(lz4)
 add_subdirectory(h5lzfilter)

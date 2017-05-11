@@ -8,7 +8,6 @@ file(GLOB BITSHUFFLE_PUBLIC_HEADERS bitshuffle.h )
 include_directories(${LZ4_SRC_DIR} ${HDF5_INCLUDE_DIRS})
 
 set(CMAKE_C_STANDARD 99)
-#set(CMAKE_C_FLAGS_RELEASE "-O3 -msse2 -mavx")
 
 add_library(h5bshuf SHARED ${BITHSUFFLE_LIB_SOURCES})
 target_link_libraries(h5bshuf lz4 ${HDF5_LIBRARIES})
