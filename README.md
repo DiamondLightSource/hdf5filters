@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dls-controls/hdf5filters.svg?branch=master)](https://travis-ci.org/dls-controls/hdf5filters)
+
 hdf5filters
 ===========
 
