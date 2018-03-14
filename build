@@ -6,14 +6,26 @@ build()
 {
     # Add dependencies to the path, just in case the build system
     # attempts to run binaries like compilers etc from the environment.
-    export PATH=$CMAKE_BIN:$HDF5_BIN:$PATH
+    export PATH=$CMAKE_BIN:$PATH
     
-    #SRC=$PWD/..
-    #pushd $SRC
-	cmake -DHDF5_ROOT=$HDF5_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX -DCMAKE_BUILD_TYPE=Release ..
+    # Check for AVX2 on build server
+    grep avx /proc/cpuinfo || echo "No avx found on build server /proc/cpuinfo"
+    
+    # First build filters/plugins against HDF5 v1.8
+    mkdir hdf5_1.8
+    pushd hdf5_1.8
+	cmake -DHDF5_ROOT=$HDF5_18_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.8 -DCMAKE_BUILD_TYPE=Release ../..
 	make VERBOSE=1
 	make install
-    #popd 
+    popd 
+
+    # Second build filters/plugins against HDF5 1.10
+    mkdir hdf5_1.10
+    pushd hdf5_1.10
+	cmake -DHDF5_ROOT=$HDF5_110_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.10 -DCMAKE_BUILD_TYPE=Release ../..
+	make VERBOSE=1
+	make install
+    popd 
 }
 
 # vim: set filetype=sh:
