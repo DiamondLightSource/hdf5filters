@@ -1,5 +1,5 @@
 PROGRAM=hdf5filters
-VERSION=0.1.0
+VERSION=0.3.0
 TAR_FILE=none
 
 build()
