@@ -55,6 +55,23 @@ Log:
 | 29 April 2017  | 0.3.3.dev1 | 762e5d7ef27ccc3d975546cc281609fb6464b563 |
 
 
+Blosc
+-----
+
+Filter utilizing the Blosc meta compressor. Blosc is an external dependency
+and this module only includes the HDF5 dynamically loadable filter code.
+Blosc combines a number of popular compression algorithms like LZ4, Snappy,
+zlib, etc and enable multi-threaded and highly optimized use of these.
+
+Code: https://github.com/blosc/hdf5-blosc
+
+Log:
+
+| Date           | version    | SHA                                      | 
+| -------------- | ---------- | ---------------------------------------- |
+| 12 July 2018   | N/A        | efa7653f0735cd03e7e9efb94f3ebcbcbec42889 |
+
+
 Build and install
 =================
 
@@ -74,6 +91,7 @@ cd hdf5filters
 mkdir -p cmake-build
 cd cmake-build
 cmake -DHDF5_ROOT=/path/to/hdf5/installation/ \
+      -DBLOSC_ROOT_DIR=/path/to/blosc/installation \
       -DCMAKE_INSTALL_PREFIX=/path/to/install/destination \
       -DCMAKE_BUILD_TYPE=Release \ 
       -DUSE_AVX2=ON \
