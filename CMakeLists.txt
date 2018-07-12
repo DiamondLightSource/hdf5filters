@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(hdf5filters C)
 
 #set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_MODULE_PATH ${hdf5filters_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 # Set output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+# === Find HDF5 ===
+message("Looking for HDF5 headers and libraries")
 IF (HDF5_ROOT)
     message(STATUS "HDF5_ROOT set: " ${HDF5_ROOT})
     set( ENV{HDF5_ROOT} ${HDF5_ROOT} )
@@ -24,6 +27,11 @@ ELSE(HDF5_ROOT)
     find_package(HDF5 1.8.11
             COMPONENTS C)
 ENDIF(HDF5_ROOT)
+message("-- hdf5 include dir: ${HDF5_INCLUDE_DIRS}")
+message("-- hdf5 libraries:   ${HDF5_LIBRARIES}")
+# === Find Blosc ===
+
+find_package(Blosc)
 
 #====== Handling rpath ============================
 # use, i.e. don't skip the full RPATH for the build tree
@@ -47,6 +55,7 @@ IF("${isSystemDir}" STREQUAL "-1")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 #======================================================
 
+message("Options:")
 option(USE_AVX2 "Use the AVX2 optimisations with the -mavx2 compiler flag" OFF)
 option(USE_SSE2 "Use the SSE2 optimisations with the -msse2 compiler flag" ON)
 
@@ -64,7 +73,13 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} ${CFLAGS_OPT}")
 message("-- Using SSE2 flags: ${USE_SSE2}")
 message("-- Using AVX2 flags: ${USE_AVX2}")
 
+message("Configuring plugins")
+
 set(LZ4_SRC_DIR ${hdf5filters_SOURCE_DIR}/lz4)
 add_subdirectory(lz4)
 add_subdirectory(h5lzfilter)
 add_subdirectory(bitshuffle)
+if (BLOSC_FOUND)
+    add_subdirectory(hdf5-blosc)
+endif ()
+
