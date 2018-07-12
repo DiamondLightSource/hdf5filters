@@ -1,5 +1,5 @@
 PROGRAM=hdf5filters
-VERSION=0.3.0
+VERSION=0.4.0
 TAR_FILE=none
 
 build()
@@ -14,7 +14,11 @@ build()
     # First build filters/plugins against HDF5 v1.8
     mkdir hdf5_1.8
     pushd hdf5_1.8
-	cmake -DHDF5_ROOT=$HDF5_18_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.8 -DCMAKE_BUILD_TYPE=Release ../..
+	cmake -DHDF5_ROOT=$HDF5_18_PREFIX \
+	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.8 \
+	      -DBLOSC_ROOT_DIR=$BLOSC_PREFIX \
+	      -DCMAKE_BUILD_TYPE=Release \
+	      ../..
 	make VERBOSE=1
 	make install
     popd 
@@ -22,7 +26,11 @@ build()
     # Second build filters/plugins against HDF5 1.10
     mkdir hdf5_1.10
     pushd hdf5_1.10
-	cmake -DHDF5_ROOT=$HDF5_110_PREFIX -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.10 -DCMAKE_BUILD_TYPE=Release ../..
+	cmake -DHDF5_ROOT=$HDF5_110_PREFIX \
+	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.10 \
+	      -DBLOSC_ROOT_DIR=$BLOSC_PREFIX \
+	      -DCMAKE_BUILD_TYPE=Release \
+	      ../..
 	make VERBOSE=1
 	make install
     popd 
