@@ -15,9 +15,10 @@ build()
     mkdir hdf5_1.8
     pushd hdf5_1.8
 	cmake -DHDF5_ROOT=$HDF5_18_PREFIX \
-	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.8 \
+	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/avx2-hdf5_1.8 \
 	      -DBLOSC_ROOT_DIR=$BLOSC_PREFIX \
 	      -DCMAKE_BUILD_TYPE=Release \
+	      -DUSE_AVX2=ON \
 	      ../..
 	make VERBOSE=1
 	make install
@@ -27,13 +28,19 @@ build()
     mkdir hdf5_1.10
     pushd hdf5_1.10
 	cmake -DHDF5_ROOT=$HDF5_110_PREFIX \
-	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/hdf5_1.10 \
+	      -DCMAKE_INSTALL_PREFIX=$TARGET_PREFIX/avx2-hdf5_1.10 \
 	      -DBLOSC_ROOT_DIR=$BLOSC_PREFIX \
 	      -DCMAKE_BUILD_TYPE=Release \
+	      -DUSE_AVX2=ON \
 	      ../..
 	make VERBOSE=1
 	make install
     popd 
+    
+	pushd $TARGET_PREFIX
+    tar -czf hdf5filters-avx2-$VERSION.tar.gz avx2* 
+	echo "If this build worked: install the tarball with avx2 libs for the build server:"
+    echo "command: cp $PWD/hdf5filters-avx2-$VERSION.tar.gz /dls_sw/work/targetOS/tar-files/"
 }
 
 # vim: set filetype=sh:
