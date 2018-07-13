@@ -1,6 +1,6 @@
 PROGRAM=hdf5filters
 VERSION=0.4.0
-TAR_FILE=none
+TAR_FILE=hdf5filters-avx2-$VERSION.tar.gz
 
 build()
 {
@@ -34,6 +34,12 @@ build()
 	make VERBOSE=1
 	make install
     popd 
+    
+    # HACK alert: the build server doesnt have AVX2 support so we have
+    #             pre-built the plugins on a workstation that *do* have AVX2
+    #             support and installed them into the build server as this module
+    #             tar-file: hdf5filters-avx2-<version>.tar.gz
+    cp -r ../src/avx2* $TARGET_PREFIX/
 }
 
 # vim: set filetype=sh:
