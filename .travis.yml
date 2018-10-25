@@ -20,7 +20,7 @@ matrix:
       before_install:
         - brew update || brew update
         - brew list
-        - brew install homebrew/science/hdf5
+        - brew install homebrew/core/hdf5
         - brew outdated cmake || brew upgrade cmake
 
 install:
