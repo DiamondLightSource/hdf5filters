@@ -100,15 +100,19 @@ make
 make install
 ```
 
-The compression libs are installed into the PREFIX/lib dir and the HDF5 filters
-are installed into the PREFIX/h5plugin dir.
+The compression libs are installed into the `CMAKE_INSTALL_PREFIX/lib` dir and the HDF5 filters
+are installed into the `CMAKE_INSTALL_PREFIX/h5plugin` dir.
 
 Usage
 =====
 
-Set the environment variable HDF5_PLUGIN_PATH to point to the PREFIX/h5plugin dir.
-Use semicolon to list multiple dirs. Then use HDF5 (>= 1.8.11) applications as
+Set the environment variable HDF5_PLUGIN_PATH to point to the `CMAKE_INSTALL_PREFIX/h5plugin` 
+dir. Use semicolon to list multiple dirs. Then use HDF5 (>= 1.8.11) applications as
 per usual and the filters will automatically be loaded when required.
+
+```
+export HDF5_PLUGIN_PATH=/path/to/hdf5filters/installation/h5plugin
+```
 
 Using the HDF5 tools with filters
 ---------------------------------
@@ -181,3 +185,74 @@ GROUP "/" {
 }
 }
 ```
+
+Compressing with blosc and h5repack
+------------------------------------
+
+For a test you might want to try to compress a raw, uncompressed data file from an experiment
+in order to get an idea of what level of compression can be achieved:
+
+The input data is an uncompressed 3D stack of images in a chunked dataset:
+
+```
+h5dump -pH input.h5 
+HDF5 "input.h5" {
+GROUP "/" {
+   DATASET "data" {
+      DATATYPE  H5T_STD_U16LE
+      DATASPACE  SIMPLE { ( 100, 1536, 2048 ) / ( H5S_UNLIMITED, 1536, 2048 ) }
+      STORAGE_LAYOUT {
+         CHUNKED ( 1, 1536, 2048 )
+         SIZE 629145600
+      }
+      FILTERS {
+         NONE
+      }
+      FILLVALUE {
+         FILL_TIME H5D_FILL_TIME_IFSET
+         VALUE  0
+      }
+      ALLOCATION_TIME {
+         H5D_ALLOC_TIME_INCR
+      }
+   }
+}
+}
+```
+
+Compress and check the output file.
+
+Note that 32001 is the Blosc User Defined (UD) filter code:
+
+```
+export HDF5_PLUGIN_PATH=/dls_sw/prod/tools/RHEL7-x86_64/hdf5filters/0-6-1/prefix/avx2-hdf5_1.10/h5plugin
+h5repack -L -f UD=32001,0,7,0,0,0,0,1,1,1 input.h5 out.h5
+h5dump -pH out.h5 
+HDF5 "out.h5" {
+GROUP "/" {
+   DATASET "data" {
+      DATATYPE  H5T_STD_U16LE
+      DATASPACE  SIMPLE { ( 100, 1536, 2048 ) / ( H5S_UNLIMITED, 1536, 2048 ) }
+      STORAGE_LAYOUT {
+         CHUNKED ( 1, 1536, 2048 )
+         SIZE 8839621 (71.173:1 COMPRESSION)       <== decent compression ratio
+      }
+      FILTERS {
+         USER_DEFINED_FILTER {
+            FILTER_ID 32001
+            COMMENT blosc
+            PARAMS { 2 2 2 6291456 1 1 1 }        <== blosc filter parameters
+         }
+      }
+      FILLVALUE {
+         FILL_TIME H5D_FILL_TIME_IFSET
+         VALUE  0
+      }
+      ALLOCATION_TIME {
+         H5D_ALLOC_TIME_INCR
+      }
+   }
+}
+}
+```
+
