@@ -15,9 +15,10 @@ matrix:
           packages: ['libhdf5-dev']
 
     - os: osx
-      homebrew:
-        packages:
-        - hdf5
+      addons:
+        homebrew:
+          packages:
+          - hdf5
     
 install:
 - mkdir -p cmake-build
