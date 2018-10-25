@@ -15,14 +15,10 @@ matrix:
           packages: ['libhdf5-dev']
 
     - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      before_install:
-        - brew update || brew update
-        - brew list
-        - brew install homebrew/core/hdf5
-        - brew outdated cmake || brew upgrade cmake
-
+      homebrew:
+        packages:
+        - hdf5
+    
 install:
 - mkdir -p cmake-build
 - mkdir -p $INSTALL_PREFIX
