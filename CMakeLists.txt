@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8...3.28)
 project(hdf5filters C)
 
 #set(CMAKE_CXX_STANDARD 98)
@@ -56,22 +56,32 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 #======================================================
 
 message("Options:")
-option(USE_AVX2 "Use the AVX2 optimisations with the -mavx2 compiler flag" OFF)
-option(USE_SSE2 "Use the SSE2 optimisations with the -msse2 compiler flag" ON)
+if(ARCH MATCHES "arm64" OR ARCH MATCHES "aarch64")
+  message(STATUS "Target Architecture: ARM")
+  
+  add_compile_definitions(TARGET_ARM64)
+  add_compile_options(-arch arm64)
+elseif(ARCH MATCHES "x86_64")
+  message(STATUS "Target Architecture: x86_64")
+
+  add_compile_definitions(TARGET_x86_64)
+  option(USE_AVX2 "Use the AVX2 optimisations with the -mavx2 compiler flag" OFF)
+  option(USE_SSE2 "Use the SSE2 optimisations with the -msse2 compiler flag" ON)
+  if (USE_AVX2)
+      set(CFLAGS_OPT "${CFLAGS_OPT} -mavx2")
+  endif(USE_AVX2)
+  if (USE_SSE2)
+      set(CFLAGS_OPT "${CFLAGS_OPT} -msse2")
+  endif(USE_SSE2)
+  message("-- Using SSE2 flags: ${USE_SSE2}")
+  message("-- Using AVX2 flags: ${USE_AVX2}")
+endif()
 
 set(CFLAGS_OPT "")
-if (USE_AVX2)
-    set(CFLAGS_OPT "${CFLAGS_OPT} -mavx2")
-endif(USE_AVX2)
-if (USE_SSE2)
-    set(CFLAGS_OPT "${CFLAGS_OPT} -msse2")
-endif(USE_SSE2)
 
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${CFLAGS_OPT}")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELEASE} ${CFLAGS_OPT}")
 
-message("-- Using SSE2 flags: ${USE_SSE2}")
-message("-- Using AVX2 flags: ${USE_AVX2}")
 
 message("Configuring plugins")
 
